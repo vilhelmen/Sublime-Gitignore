@@ -1,6 +1,6 @@
 [
     {
         "caption": "Gitignore: New gitignore",
-        "command": "rungibo"
+        "command": "compilegitignore"
     }
 ]

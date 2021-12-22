@@ -1,42 +1,37 @@
-# Sublime Text 2 and 3 Gitignore plug-in
+# Sublime Text 3/4 Gitignore plugin
 
-### Sublime Text 2 and 3 plug-in for fetching gitignore boilerplates from [the collection of gitignore boilerplates by Github](https://github.com/github/gitignore)
+### Sublime Text 3/4 plugin for compiling gitignore templates from [GitHub's collection](https://github.com/github/gitignore)
 
 ### How it works
-Press ```Cmd + Shift + P``` for Mac and ```Ctrl + Shift + P``` for Linux/Windows<br />
+Open the command Pallet with ```Cmd + Shift + P``` for Mac or ```Ctrl + Shift + P``` for Linux/Windows
+
 Write ```Gitignore``` and select ```Gitignore: new gitignore```
 
-Then select the desired gitignore boilerplate.
+Select templates from the list and select `Done` to create your new gitignore.
 
-Now select another boilerplate. When you are done, select ```Done```.
-
-Save the newly open file as <code><i>something</i>.gitignore</code> and your done!
+Save it to your repo, add it, and you're good to go!
 
 ## Installation
 
-Install via package control
+Look for `Gitignore` on package control!
 
 ### Or
 
 #### Linux
 
 ```
-git clone https://github.com/theadamlt/Sublime-Gitignore ~/.config/sublime-text-2/Packages/Gitignore
+git clone https://github.com/vilhelmen/Sublime-Gitignore ~/.config/sublime-text-4/Packages/Gitignore
 ```
 
 #### Windows
 
 ```
-git clone https://github.com/theadamlt/Sublime-Gitignore %APPDATA%/Sublime\ Text\ 2/Packages/Gitignore
+git clone https://github.com/vilhelmen/Sublime-Gitignore %APPDATA%/Sublime\ Text\ 4/Packages/Gitignore
 ```
 
 
 #### Mac
 
 ```
-git clone https://github.com/theadamlt/Sublime-Gitignore ~/Library/Application\ Support/Sublime\ Text\ 2/Packages/Gitignore
+git clone https://github.com/vilhelmen/Sublime-Gitignore ~/Library/Application\ Support/Sublime\ Text\ 4/Packages/Gitignore
 ```
-
-<hr>
-
-The plugin is inspired by [gibo](https://github.com/simonwhitaker/gitignore-boilerplates) so thanks to Simon Whitaker.

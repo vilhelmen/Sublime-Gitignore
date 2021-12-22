@@ -1,102 +1,75 @@
 import os
-import zipfile
 
 import sublime
-import sublime_plugin
 
 
-class rungiboCommand(sublime_plugin.WindowCommand):
+class compilegitignoreCommand(sublime_plugin.WindowCommand):
+    _file_listing = None
+    _search_path = None
 
-    _bp_list = []
-    _bp_folder = 'boilerplates'
-    _package_path = None
+    def _delayed_init(self):
+        # Put off init until first run to save resources
+        if not self._file_listing:
+            self._search_path = os.path.join(sublime.packages_path(), 'Gitignore', 'gitignore')
+            # Deprecating zipfile package support (sorry!)
+            # It didn't really support unzipped overrides. This will, but I guess an update would wipe it out?
+            # This won't recurse, sorry! I would if we had pathlib!
+            # Also, I suppose it's vulnerable to directories ending in .gitignore
+            self._file_listing = sorted(f[:-10] for f in os.listdir(self._search_path) if f.endswith('.gitignore'))
+            # A set would be much more efficient, but a sorted list is way nicer to display
+            # Might be able to use a sorted dict key set, but it's iffy
 
-    def _find_path(self):
-        if not self._package_path:
-            paths = [os.path.join(sublime.installed_packages_path(), 'Gitignore.sublime-package'),
-                     os.path.join(sublime.packages_path(), 'Gitignore'),
-                     os.path.join(sublime.packages_path(), 'Sublime-Gitignore')]
-            for path in paths:
-                if os.path.exists(path):
-                    self._package_path = path
-                    break
+    def _run_selection(self):
+        # Gotta do some scoping tricks to maintain the list through the callbacks
+        selection = []
+        # Just gotta keep a copy :(
+        # You COULD stitch iterators together ['Done'], [x for x in self._list_items if x not in selection]
+        # BUT then the selection indices are off
+        listing = self._file_listing.copy()
 
-        return self._package_path
+        def selection_callback(index):
+            if index < 0:
+                # User cancel
+                pass
+            elif selection and index == 0:
+                # Done!
+                self._write_file(selection)
+            else:
+                # user selected something from the list
+                selection.append(listing[index])
+                del listing[index]
+                # Could do some fancy stitching.... but could also not!
+                if len(selection) == 1:
+                    listing.insert(0, 'Done')
+                self.window.show_quick_panel(listing, selection_callback)
 
-    def _listdir(self):
-        package_path = self._find_path()
-        if zipfile.is_zipfile(package_path):
-            # Dealing with .sublime-package file
-            package = zipfile.ZipFile(package_path, "r")
-            path = self._bp_folder + '/'
-            return [f.replace(path, '') for f in package.namelist() if f.startswith(path)]
-        else:
-            return os.listdir(os.path.join(package_path, self._bp_folder))
-
-    def _loadfile(self, bp):
-        package_path = self._find_path()
-        if zipfile.is_zipfile(package_path):
-            # Dealing with .sublime-package file
-            package = zipfile.ZipFile(package_path, 'r')
-            path = self._bp_folder + '/' + bp
-            f = package.open(path, 'r')
-            text = f.read().decode()
-            f.close()
-            return text
-        else:
-            file_path = os.path.join(package_path, self._bp_folder, bp)
-            f = open(file_path, 'r')
-            text = f.read().decode()
-            f.close()
-            return text
-
-    def build_list(self):
-        if not self._bp_list:
-            for bp_file in self._listdir():
-                self._bp_list.append(bp_file.replace('.gitignore', ''))
-
-        self.chosen_array = []
-        self.first_list = self._bp_list[:]  # Copy _bp_list
-        self.second_list = ['Done'] + self._bp_list
-
-    def show_quick_panel(self, options, done):
-        # Fix from
-        # http://www.sublimetext.com/forum/viewtopic.php?f=6&t=10999
-        sublime.set_timeout(lambda: self.window.show_quick_panel(options, done), 10)
+        self.window.show_quick_panel(listing, selection_callback)  # sublime.KEEP_OPEN_ON_FOCUS_LOST ?
 
     def run(self):
-        self.build_list()
-        self.show_quick_panel(self.first_list, self.first_select)
+        self._delayed_init()
+        self._run_selection()
 
-    def first_select(self, index):
-        if index > -1:
-            self.chosen_array.append(self.first_list[index])
-            self.second_list.remove(self.first_list[index])
-            self.show_quick_panel(self.second_list, self.second_select)
+    def _write_file(self, chosen_files):
+        export = []
+        for name in chosen_files:
+            # if the file disappeared, post-indexing, it's not our fault.
+            with open(os.path.join(self._search_path, name + '.gitignore'), 'r') as f:
+                export.append(' '.join(('###', name, '###')))
+                export.append(f.read())
 
-    def second_select(self, index):
-        if index == 0:
-            self.write_file()
-            self.build_list()
-        elif index > 0:
-            self.chosen_array.append(self.second_list[index])
-            self.second_list.remove(self.second_list[index])
-            self.show_quick_panel(self.second_list, self.second_select)
-
-    def write_file(self):
-        final = ''
-
-        for bp in self.chosen_array:
-            text = self._loadfile(bp + ".gitignore")
-            final = final + '###' + bp + '###\n\n' + text + '\n\n'
-
-        final = final.strip()
+        export = '\n\n'.join(export)
+        # An unconstrained (r)strip may be bad?
+        # For example, the MacOS one has '.Icon\r\r', which strip would mangle if it was at the end of the list
+        #  (and sublime mangles if you open it which drives me crazy when I try to add to it)
+        # The gitignore syntax file doesn't mention line endings at all, which is rude.
+        if not export.endswith('\n'):
+            export += '\n'
         view = sublime.active_window().new_file()
-        view.run_command('writegibo', {'bp': final})
+        # Wild, we can't inject text in a new window without an edit object, so it has to be a second command(??)
+        view.run_command('writegitignore', {'text': export})
 
 
-class writegiboCommand(sublime_plugin.TextCommand):
-
+class writegitignoreCommand(sublime_plugin.TextCommand):
     def run(self, edit, **kwargs):
-        self.view.insert(edit, 0, kwargs['bp'])
+        self.view.insert(edit, 0, kwargs['text'])
         self.view.set_name('.gitignore')
