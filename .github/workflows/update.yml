@@ -30,7 +30,7 @@ jobs:
           ./compile.sh
           status="$(git status --porcelain | wc -l | tr -d ' \n')"
           if [ "$status" != "0" ]; then
-            TAG="1.$(date '+%y.%m')"
+            TAG="1.0.$(date '+%y%m')"
             git config --global user.name 'Github Update Action'
             git config --global user.email 'ghaction@github'
             git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
