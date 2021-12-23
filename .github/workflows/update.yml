@@ -23,13 +23,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Compile data
-      - run: ./compile.sh
-
       # Runs a set of commands using the runners shell
       # https://stackoverflow.com/a/58393457
       - name: Check for change, push, tag
-      - run: |
+        run: |
+          ./compile.sh
           status="$(git status --porcelain | wc -l | tr -d ' \n')"
           if [ "$status" != "0" ]; then
             TAG="0.$(date '+%y.%m')"
