@@ -32,7 +32,7 @@ jobs:
           if [ "$status" != "0" ]; then
             TAG="1.0.$(date '+%y%m')"
             git config --global user.name 'Github Update Action'
-            git config --global user.email 'ghaction@github'
+            git config --global user.email 'vilhelmen@users.noreply.github.com'
             git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
             git add --all
             git commit -am "Automatic template update"
