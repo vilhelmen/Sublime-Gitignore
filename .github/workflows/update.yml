@@ -34,8 +34,9 @@ jobs:
             git config --global user.name 'Github Update Action'
             git config --global user.email 'ghaction@github'
             git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+            git add --all
             git commit -am "Automatic template update"
             git tag "${TAG}"
             git push origin
-            git push "${TAG}"
+            git push origin "${TAG}"
           fi
