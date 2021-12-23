@@ -5,7 +5,7 @@
 ### How it works
 Open the command Pallet with ```Cmd + Shift + P``` for Mac or ```Ctrl + Shift + P``` for Linux/Windows
 
-Write ```Gitignore``` and select ```Gitignore: new gitignore```
+Type ```Gitignore``` and select ```Gitignore: new gitignore```
 
 Select templates from the list and select `Done` to create your new gitignore.
 
