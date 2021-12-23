@@ -39,4 +39,6 @@ jobs:
             git tag "${TAG}"
             git push origin
             git push origin "${TAG}"
+          else
+            echo "Nothing to do!"
           fi
