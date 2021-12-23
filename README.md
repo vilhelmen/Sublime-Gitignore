@@ -20,18 +20,18 @@ Look for `Gitignore` on package control!
 #### Linux
 
 ```
-git clone https://github.com/vilhelmen/Sublime-Gitignore ~/.config/sublime-text-4/Packages/Gitignore
+git clone https://github.com/vilhelmen/Sublime-Gitignore ~/.config/sublime-text/Packages/Gitignore
 ```
 
 #### Windows
 
 ```
-git clone https://github.com/vilhelmen/Sublime-Gitignore %APPDATA%/Sublime\ Text\ 4/Packages/Gitignore
+git clone https://github.com/vilhelmen/Sublime-Gitignore %APPDATA%/Sublime\ Text/Packages/Gitignore
 ```
 
 
 #### Mac
 
 ```
-git clone https://github.com/vilhelmen/Sublime-Gitignore ~/Library/Application\ Support/Sublime\ Text\ 4/Packages/Gitignore
+git clone https://github.com/vilhelmen/Sublime-Gitignore ~/Library/Application\ Support/Sublime\ Text/Packages/Gitignore
 ```
