@@ -1,6 +1,7 @@
 import os
 
 import sublime
+import sublime_plugin
 
 
 class compilegitignoreCommand(sublime_plugin.WindowCommand):
