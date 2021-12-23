@@ -29,7 +29,7 @@ jobs:
       # Runs a set of commands using the runners shell
       # https://stackoverflow.com/a/58393457
       - name: Check for change, push, tag
-        run: |
+      - run: |
           status="$(git status --porcelain | wc -l | tr -d ' \n')"
           if [ "$status" != "0" ]; then
             TAG="0.$(date '+%y.%m')"
