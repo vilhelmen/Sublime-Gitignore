@@ -1,0 +1,21 @@
+name: Activity reset
+
+on:
+  schedule:
+  - cron: '28 15 11 * *'
+
+jobs:
+  touch_readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pick a number
+        run: |
+          number="$(date +%s%N | cut -b15-17)"
+          sed -E 's/cool number: .*/cool number: '"${number}"'/g' README.md 
+          git config --global user.name 'Github Update Action'
+          git config --global user.email 'vilhelmen@users.noreply.github.com'
+          git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git add --all
+          git commit -am 'Automatic template update'
+          git push origin

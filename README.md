@@ -35,3 +35,7 @@ git clone https://github.com/vilhelmen/Sublime-Gitignore %APPDATA%/Sublime\ Text
 ```
 git clone https://github.com/vilhelmen/Sublime-Gitignore ~/Library/Application\ Support/Sublime\ Text/Packages/Gitignore
 ```
+
+---
+
+This month's cool number: 27
