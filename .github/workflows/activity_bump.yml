@@ -3,6 +3,7 @@ name: Activity reset
 on:
   schedule:
   - cron: '28 15 11 * *'
+  workflow_dispatch:
 
 jobs:
   touch_readme:
