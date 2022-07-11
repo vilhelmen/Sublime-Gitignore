@@ -38,4 +38,4 @@ git clone https://github.com/vilhelmen/Sublime-Gitignore ~/Library/Application\ 
 
 ---
 
-This month's cool number: 762
+This month's cool number: 844
